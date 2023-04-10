@@ -27,9 +27,6 @@ def calculate_2d_dft_matrix(x: np.ndarray) -> np.ndarray:
     n1 = x.shape[0]
     n2 = x.shape[1]
 
-    dftmtx = np.ndarray((n1, n2), dtype=np.complex_)
-    results = np.zeros((n1, n2), dtype=np.complex_)
-
     n1_fourier_mtx = np.zeros((n1, n1), dtype=np.complex_)
     for i1 in range(n1):
         for i2 in range(n1):
@@ -70,7 +67,7 @@ def confirm_transforms_work():
 def run_time_tests():
     results = []
     x = []
-    for columnAndRowCount in range(10, 80, 10):
+    for columnAndRowCount in range(10, 100, 10):
         signal = np.random.rand(columnAndRowCount, columnAndRowCount)
         calculate_2d_dft_matrix(signal)
         dft_start_time = time.time()
@@ -102,6 +99,49 @@ def run_time_tests():
 
     plt.show()
 
+    fig, ax2 = plt.subplots(1)
+    ax2.plot(x, mtx_results, label='2D MTX')
+    ax2.plot(x, fft_results, label='2D FFT')
+    ax2.set_xlabel('N Samples')
+    ax2.set_ylabel('Time in Seconds')
+    ax2.legend()
+
+    plt.show()
+
+
+# Skip the double summation implementation due to performance issues
+def run_high_sample_trial_tests():
+    results = []
+    x = []
+    for columnAndRowCount in range(250, 2500, 250):
+        signal = np.random.rand(columnAndRowCount, columnAndRowCount)
+
+        fft_start_time = time.time()
+        two_dim_dft_fft = scipy.fft.fft2(signal)
+        fft_end_time = time.time()
+
+        mtx_start_time = time.time()
+        two_dim_dft_mtx = calculate_2d_dft_matrix(signal)
+        mtx_end_time = time.time()
+
+        results.append((fft_end_time - fft_start_time, mtx_end_time - mtx_start_time))
+        x.append(columnAndRowCount)
+
+    fft_results = [r[0] for r in results]
+    mtx_results = [r[1] for r in results]
+
+    fig, ax1 = plt.subplots(1)
+    ax1.plot(x, mtx_results, label='2D MTX')
+    ax1.plot(x, fft_results, label='2D FFT')
+    ax1.set_xlabel('N Samples')
+    ax1.set_ylabel('Time in Seconds')
+    ax1.legend()
+
+    plt.show()
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     confirm_transforms_work()
+    run_time_tests()
+    run_high_sample_trial_tests()
