@@ -6,6 +6,11 @@ import time
 
 
 def calculate_2d_dft(x: np.ndarray) -> np.ndarray:
+    """
+    This method calculates the 2D DFT using the Summation algorithm
+    :param x:
+    :return: DFT Matrix with the same dimensions as x
+    """
     # Get individual dimensions for iterations
     n1 = x.shape[0]
     n2 = x.shape[1]
@@ -23,7 +28,13 @@ def calculate_2d_dft(x: np.ndarray) -> np.ndarray:
 
     return results
 
+
 def calculate_2d_dft_matrix(x: np.ndarray) -> np.ndarray:
+    """
+    This method calculates the 2D DFT using the Matrix algorithm
+    :param x:
+    :return: DFT Matrix with the same dimensions as x
+    """
     n1 = x.shape[0]
     n2 = x.shape[1]
 
@@ -44,6 +55,10 @@ def calculate_2d_dft_matrix(x: np.ndarray) -> np.ndarray:
 
 
 def confirm_transforms_work():
+    """
+    Calculate the DFT matrix using the Summation, FFT, and Matrix algorithms.
+    Then print them to the console for verification they match.
+    """
     print('Enter number of rows')
     rows = int(input())
 
@@ -65,6 +80,9 @@ def confirm_transforms_work():
 
 
 def run_time_tests():
+    """
+    Run incremental timed tests to test performance of each algorithm
+    """
     results = []
     x = []
     for columnAndRowCount in range(10, 100, 10):
@@ -99,6 +117,7 @@ def run_time_tests():
 
     plt.show()
 
+    # Plot the two efficient algorithms only for more details on their relative performances
     fig, ax2 = plt.subplots(1)
     ax2.plot(x, mtx_results, label='2D MTX')
     ax2.plot(x, fft_results, label='2D FFT')
@@ -111,6 +130,9 @@ def run_time_tests():
 
 # Skip the double summation implementation due to performance issues
 def run_high_sample_trial_tests():
+    """
+    Run larger trials on the more efficient algorithms
+    """
     results = []
     x = []
     for columnAndRowCount in range(250, 2500, 250):
@@ -140,7 +162,6 @@ def run_high_sample_trial_tests():
     plt.show()
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     confirm_transforms_work()
     run_time_tests()
